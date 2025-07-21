@@ -1,0 +1,164 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --Rosewater: rgb(244, 219, 214);
+  --Flamingo: rgb(240, 198, 198);
+  --Pink: rgb(245, 189, 230);
+  --Mauve: rgb(198, 160, 246);
+  --Red: rgb(237, 135, 150);
+  --Maroon: rgb(238, 153, 160);
+  --Peach: rgb(245, 169, 127);
+  --Yellow: rgb(238, 212, 159);
+  --Green: rgb(166, 218, 149);
+  --Teal: rgb(139, 213, 202);
+  --Sky: rgb(145, 215, 227);
+  --Sapphire: rgb(125, 196, 228);
+  --Blue: rgb(138, 173, 244);
+  --Lavender: rgb(183, 189, 248);
+  --Text: rgb(202, 211, 245);
+  --Subtext-1: rgb(184, 192, 224);
+  --Subtext-0: rgb(165, 173, 203);
+  --Overlay-2: rgb(147, 154, 183);
+  --Overlay-1: rgb(128, 135, 162);
+  --Overlay-0: rgb(110, 115, 141);
+  --Surface-2: rgb(91, 96, 120);
+  --Surface-1: rgb(73, 77, 100);
+  --Surface-0: rgb(54, 58, 79);
+  --Base: rgb(36, 39, 58);
+  --Mantle: rgb(30, 32, 48);
+  --Crust: rgb(24, 25, 38);
+}
+
+a,
+button,
+input {
+  outline: none;
+  border: none;
+}
+
+body {
+  background-color: var(--Base);
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0%;
+  }
+  to {
+    opacity: 100%;
+  }
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  button {
+    padding: 20px 80px;
+    font-size: 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    &.create-btn {
+      background-color: var(--Red);
+      &:hover {
+        background-color: hsl(341 74% 73% / 100%);
+      }
+    }
+    &.join-btn {
+      background-color: var(--Yellow);
+      &:hover {
+        background-color: hsl(50 70% 78% / 100%);
+      }
+    }
+  }
+}
+
+.start-game-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--Surface-0);
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0px 3px 0px 7px var(--Crust);
+  animation: fadeIn 1s;
+  h1 {
+    text-align: center;
+    font-size: 48px;
+    margin-bottom: 20px;
+    padding: 0 60px;
+  }
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+  input {
+    width: 100%;
+    padding: 20px 40px;
+    border-radius: 6px;
+    font-size: 18px;
+  }
+  button[type="submit"] {
+    padding: 20px 40px;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: var(--Green);
+    color: var(--Base);
+    margin-top: 20px;
+    cursor: pointer;
+    &:hover {
+      background-color: hsl(115 48% 72% / 100%);
+    }
+  }
+}
+
+.board {
+  display: flex;
+  background-color: var(--Surface-1);
+  gap: 15px;
+  width: fit-content;
+  padding: 20px;
+  border-radius: 40px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  [class^="board-col-"] {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 15px;
+    .cell {
+      background-color: var(--Base);
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      &.player-1 {
+        background-color: var(--Red);
+      }
+      &.player-2 {
+        background-color: var(--Yellow);
+      }
+    }
+    &:hover {
+      .cell[class*="player-"] + .cell:not([class*="player-"]),
+      .cell:not([class*="player-"]):first-of-type {
+        background-color: var(--Surface-0);
+      }
+    }
+  }
+}
