@@ -15,7 +15,7 @@ app.use(cors());
 app.get("/check-room/:roomCode", (req, res) => {
   const roomCode = req.params.roomCode;
   const playersInRoom = players.getPlayersNames(roomCode).length;
-  res.json({ isAvailable: playersInRoom < 2 });
+  res.json({ isAvailable: playersInRoom < 2, isCreated: playersInRoom === 1 });
 });
 
 io.on("connect", (socket) => {
