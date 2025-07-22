@@ -54,6 +54,12 @@ body {
   }
 }
 
+@keyframes waiting {
+  100% {
+    transform: translateX(300%);
+  }
+}
+
 .menu {
   display: flex;
   flex-direction: column;
@@ -62,11 +68,15 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  button {
+  a {
     padding: 20px 80px;
     font-size: 20px;
     border-radius: 6px;
     cursor: pointer;
+    color: var(--Base);
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
     &.create-btn {
       background-color: var(--Red);
       &:hover {
@@ -94,7 +104,6 @@ body {
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0px 3px 0px 7px var(--Crust);
-  animation: fadeIn 1s;
   h1 {
     text-align: center;
     font-size: 48px;
@@ -127,6 +136,54 @@ body {
   }
 }
 
+.room-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  .room-code {
+    font-size: 35px;
+    margin-bottom: 20px;
+    .code {
+      color: var(--Peach);
+      font-weight: bold;
+    }
+  }
+  .waiting-div {
+    .waiting-text {
+      font-size: 20px;
+      margin-bottom: 40px;
+      color: var(--Text);
+    }
+    .waiting {
+      position: relative;
+      width: 50%;
+      height: 7px;
+      margin: auto;
+      border-radius: 4px;
+      background-color: var(--Overlay-0);
+      overflow: hidden;
+      &:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        border-radius: 4px;
+        width: calc(100% / 3);
+        height: 100%;
+        background-color: var(--Rosewater);
+        animation: waiting 1.5s infinite ease-in;
+      }
+    }
+  }
+  .error {
+    color: var(--Red);
+    font-size: 35px;
+    font-weight: bold;
+  }
+}
+
 .board {
   display: flex;
   background-color: var(--Surface-1);
@@ -138,6 +195,7 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  animation: fadeIn 1s;
   [class^="board-col-"] {
     display: flex;
     flex-direction: column-reverse;
@@ -161,4 +219,5 @@ body {
       }
     }
   }
+  display: none;
 }

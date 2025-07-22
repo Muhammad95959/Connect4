@@ -1,12 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Connect4</title>
-    <link href="src/css/style.css" rel="stylesheet">
+    <link href="src/css/style.css" rel="stylesheet" />
   </head>
   <body>
+    <div class="room-info">
+      <div class="room-code">
+        <span>Room Code: </span>
+        <span class="code"></span>
+      </div>
+      <div class="waiting-div">
+        <p class="waiting-text">The game will begin once the other player connects.</p>
+        <div class="waiting"></div>
+      </div>
+    </div>
     <div class="board">
       <div class="board-col-1">
         <div class="cell"></div>
@@ -66,5 +76,5 @@
       </div>
     </div>
   </body>
-  <script src="src/ts/game.ts"></script>
+  <script type="module" src="src/ts/game.ts"></script>
 </html>
