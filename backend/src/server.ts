@@ -26,12 +26,21 @@ io.on("connect", (socket) => {
     if (players.getPlayersNames(params.roomCode).length >= 2) return callback("This room already has two players.");
     socket.join(params.roomCode);
     players.addPlayer(socket.id, params.name, params.roomCode);
-    if (players.getPlayersNames(params.roomCode).length === 2) io.to(params.roomCode).emit("startGame");
+    if (players.getPlayersNames(params.roomCode).length === 2) {
+      socket.emit("playerTurn", false);
+      io.to(params.roomCode).emit("startGame");
+    } else {
+      socket.emit("playerTurn", true);
+    }
   });
 
   socket.on("disconnect", () => {
     const player = players.removePlayer(socket.id);
     if (player) io.to(player.roomCode).emit("playerDisconnected");
+  });
+
+  socket.on("play", (params) => {
+    socket.broadcast.emit("opponentMove", params);
   });
 });
 
