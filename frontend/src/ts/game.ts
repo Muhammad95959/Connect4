@@ -27,13 +27,14 @@ socket.on("playerTurn", (frst) => {
 });
 
 socket.on("startGame", () => {
-  roomInfoElement.style.display = "none";
-  boardElement.style.display = "flex";
+  roomInfoElement.classList.add("hidden");
+  boardElement.classList.remove("hidden");
 });
 
+// TODO: hadle this disaster
 socket.on("opponentDisconnected", () => {
-  boardElement.style.display = "none";
-  roomInfoElement.style.display = "block";
+  boardElement.classList.add("hidden");
+  roomInfoElement.classList.remove("hidden");
   roomInfoElement.innerHTML = `<div class="error">Your opponent has disconnected. <a href="/">Go back to main menu</a></div>`;
 });
 

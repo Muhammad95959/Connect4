@@ -57,7 +57,67 @@ io.on("connect", (socket) => {
       break;
     }
     io.to(roomCode).emit("boardUpdated", game.boardData);
+    checkForWin(game.boardData, params.first ? 1 : 2, roomCode);
   });
 });
 
 server.listen(port, () => console.log(`Server started at http://localhost:${port}`));
+
+function checkForWin(boardData: number[][], player: number, roomCode: string) {
+  // check vertical
+  for (let i = 0; i < boardData.length; i++) {
+    let count = 0;
+    for (let j = 0; j < boardData[i].length; j++) {
+      boardData[i][j] === player ? count++ : (count = 0);
+      if (count === 4) {
+        io.to(roomCode).emit("endGame", { winner: player });
+        return;
+      }
+    }
+  }
+  // check horizontal
+  for (let i = 0; i < boardData[0].length; i++) {
+    let count = 0;
+    for (let j = 0; j < boardData.length; j++) {
+      boardData[j][i] === player ? count++ : (count = 0);
+      if (count === 4) {
+        io.to(roomCode).emit("endGame", { winner: player });
+        return;
+      }
+    }
+  }
+  // check diagonal (ltr)
+  for (let i = 0; i <= boardData.length - 4; i++) {
+    for (let j = 0; j <= boardData[0].length - 4; j++) {
+      let count = 0;
+      let row = i;
+      let col = j;
+      while (row < boardData.length && col < boardData[0].length) {
+        boardData[row][col] === player ? count++ : (count = 0);
+        if (count === 4) {
+          io.to(roomCode).emit("endGame", { winner: player });
+          return;
+        }
+        row++;
+        col++;
+      }
+    }
+  }
+  // check diagonal (rtl)
+  for (let i = boardData.length - 1; i >= 3; i--) {
+    for (let j = 0; j <= boardData[0].length - 4; j++) {
+      let count = 0;
+      let row = i;
+      let col = j;
+      while (row >= 0 && col < boardData[0].length) {
+        boardData[row][col] === player ? count++ : (count = 0);
+        if (count === 4) {
+          io.to(roomCode).emit("endGame", { winner: player });
+          return;
+        }
+        row--;
+        col++;
+      }
+    }
+  }
+}

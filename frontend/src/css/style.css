@@ -142,6 +142,9 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+  &.hidden {
+    display: none;
+  }
   .room-code {
     font-size: 35px;
     margin-bottom: 20px;
@@ -196,6 +199,9 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   animation: fadeIn 1s;
+  &.hidden {
+    display: none;
+  }
   .board-col {
     display: flex;
     flex-direction: column-reverse;
@@ -219,5 +225,4 @@ body {
       }
     }
   }
-  display: none;
 }
