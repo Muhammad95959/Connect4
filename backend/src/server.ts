@@ -18,6 +18,8 @@ app.get("/check-room/:roomCode", (req, res) => {
   res.json({ isAvailable: playersInRoom < 2, isCreated: playersInRoom === 1 });
 });
 
+const games: { [roomCode: string]: { boardData: number[][] } } = {};
+
 io.on("connect", (socket) => {
   console.log(`A new user connected at ${new Date().toString().split(" ")[4]}`);
 
@@ -27,6 +29,7 @@ io.on("connect", (socket) => {
     socket.join(params.roomCode);
     players.addPlayer(socket.id, params.name, params.roomCode);
     if (players.getPlayersNames(params.roomCode).length === 2) {
+      games[params.roomCode] = { boardData: Array.from({ length: 7 }, () => Array(6).fill(0)) };
       socket.emit("playerTurn", false);
       io.to(params.roomCode).emit("startGame");
     } else {
@@ -36,11 +39,24 @@ io.on("connect", (socket) => {
 
   socket.on("disconnect", () => {
     const player = players.removePlayer(socket.id);
-    if (player) io.to(player.roomCode).emit("playerDisconnected");
+    if (player) {
+      delete games[player.roomCode];
+      io.to(player.roomCode).emit("opponentDisconnected");
+    }
   });
 
-  socket.on("play", (params) => {
-    socket.broadcast.emit("opponentMove", params);
+  socket.on("newMove", (params) => {
+    const player = players.getPlayer(socket.id);
+    if (!player) return;
+    const { roomCode } = player;
+    const game = games[player.roomCode];
+    if (!game) return;
+    for (let i = 0; i < game.boardData[params.colIndex].length; i++) {
+      if (game.boardData[params.colIndex][i] !== 0) continue;
+      game.boardData[params.colIndex][i] = params.first ? 1 : 2;
+      break;
+    }
+    io.to(roomCode).emit("boardUpdated", game.boardData);
   });
 });
 

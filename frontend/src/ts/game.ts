@@ -3,10 +3,9 @@ import { io } from "socket.io-client";
 const roomInfoElement = document.querySelector(".room-info") as HTMLDivElement;
 const codeElement = document.querySelector(".room-info .code") as HTMLSpanElement;
 const boardElement = document.querySelector(".board") as HTMLDivElement;
-const boardColumns = document.querySelectorAll('[class*="board-col-"]');
+const boardColumns = [...(document.getElementsByClassName("board-col") as HTMLCollectionOf<HTMLDivElement>)];
 const url = "http://localhost:8000";
-let myFirstTurn = 1;
-let opponentFirstTurn = 2;
+let first = true;
 let myTurn = true;
 
 const socket = io(url, {
@@ -22,10 +21,9 @@ socket.on("connect", () => {
   });
 });
 
-socket.on("playerTurn", (first) => {
-  myTurn = first;
-  myFirstTurn = first ? 1 : 2;
-  opponentFirstTurn = first ? 2 : 1;
+socket.on("playerTurn", (frst) => {
+  myTurn = frst;
+  first = frst;
 });
 
 socket.on("startGame", () => {
@@ -33,35 +31,29 @@ socket.on("startGame", () => {
   boardElement.style.display = "flex";
 });
 
-socket.on("playerDisconnected", () => {
+socket.on("opponentDisconnected", () => {
   boardElement.style.display = "none";
   roomInfoElement.style.display = "block";
+  roomInfoElement.innerHTML = `<div class="error">Your opponent has disconnected. <a href="/">Go back to main menu</a></div>`;
 });
 
-socket.on("opponentMove", (params) => {
-  const cells = boardColumns[params.colIndex].getElementsByClassName("cell") as HTMLCollectionOf<HTMLDivElement>;
-  for (const cell of cells) {
-    if (!/player-[12]/.test(cell.className)) {
-      cell.classList.add(`player-${opponentFirstTurn}`);
-      myTurn = !myTurn;
-      break;
+socket.on("boardUpdated", (boardData: number[][]) => {
+  boardColumns.forEach((col, index) => {
+    const cells = col.getElementsByClassName("cell") as HTMLCollectionOf<HTMLDivElement>;
+    for (let i = 0; i < boardData[index].length; i++) {
+      const val = boardData[index][i];
+      cells[i].classList.remove("player-1", "player-2");
+      if (val !== 0) {
+        cells[i].classList.add(`player-${val}`);
+      }
     }
-  }
+  });
+  myTurn = !myTurn;
 });
 
 codeElement.textContent = new URLSearchParams(window.location.search).get("roomCode");
 boardColumns.forEach((col, index) => {
-  const cells = col.getElementsByClassName("cell") as HTMLCollectionOf<HTMLDivElement>;
   col.addEventListener("click", () => {
-    if (myTurn) {
-      for (const cell of cells) {
-        if (!/player-[12]/.test(cell.className)) {
-          cell.classList.add(`player-${myFirstTurn}`);
-          socket.emit("play", { colIndex: index, cellClass: `player-${myFirstTurn}` });
-          myTurn = !myTurn;
-          break;
-        }
-      }
-    }
+    if (myTurn) socket.emit("newMove", { colIndex: index, first });
   });
 });
