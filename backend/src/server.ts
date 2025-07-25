@@ -30,10 +30,13 @@ io.on("connect", (socket) => {
     players.addPlayer(socket.id, params.name, params.roomCode);
     if (players.getPlayersNames(params.roomCode).length === 2) {
       games[params.roomCode] = { boardData: Array.from({ length: 7 }, () => Array(6).fill(0)) };
-      socket.emit("playerTurn", false);
-      io.to(params.roomCode).emit("startGame");
+      socket.emit("firstTurn", false);
+      const firstPlayer =
+        players.getPlayersNames(params.roomCode).filter((player) => player !== params.name)[0] || params.name;
+      const secondPlayer = params.name;
+      io.to(params.roomCode).emit("startGame", { firstPlayer, secondPlayer });
     } else {
-      socket.emit("playerTurn", true);
+      socket.emit("firstTurn", true);
     }
   });
 
@@ -58,6 +61,10 @@ io.on("connect", (socket) => {
     }
     io.to(roomCode).emit("boardUpdated", game.boardData);
     checkForWin(game.boardData, params.first ? 1 : 2, roomCode);
+  });
+
+  socket.on("removeRoom", (roomCode) => {
+    io.in(roomCode).disconnectSockets();
   });
 });
 

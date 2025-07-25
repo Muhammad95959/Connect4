@@ -4,20 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="src/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
     <title>Connect4</title>
   </head>
-  <body>
+  <body class="joinGame">
     <form class="start-game-form" action="game.html">
-      <h1>Join Game</h1>
-      <div>
-        <label>Player Name</label>
-        <input required type="text" name="name" placeholder="Enter your name" />
+      <div class="image">
+        <img src="src/assets/games.jpg" />
       </div>
-      <div>
-        <label>Room Code</label>
-        <input required type="text" name="roomCode" placeholder="Enter Room Code" />
+      <div class="content">
+        <h1>Join Game</h1>
+        <div>
+          <label>Player Name</label>
+          <input required type="text" name="name" placeholder="Enter your name" />
+        </div>
+        <div>
+          <label>Room Code</label>
+          <input required type="text" name="roomCode" placeholder="Enter Room Code" />
+        </div>
+        <button type="submit" class="join">Join</button>
       </div>
-      <button type="submit">Join</button>
     </form>
   </body>
   <script type="module" src="src/ts/joinGame.ts"></script>

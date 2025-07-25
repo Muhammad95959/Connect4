@@ -3,10 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Connect4</title>
     <link href="src/css/style.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+    <title>Connect4</title>
   </head>
-  <body>
+  <body class="game">
     <div class="room-info">
       <div class="room-code">
         <span>Room Code: </span>
@@ -17,62 +23,89 @@
         <div class="waiting"></div>
       </div>
     </div>
-    <div class="board hidden">
-      <div class="board-col" data-col-index="0">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
+    <div class="content hidden">
+      <div class="top-btns row">
+        <button>MENU</button>
+        <button>RESTART</button>
       </div>
-      <div class="board-col" data-col-index="1">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
+      <div class="row">
+        <div class="first-player">
+          <div class="name">Player</div>
+          <div class="score">0</div>
+        </div>
+        <div class="second-player">
+          <div class="name">Player</div>
+          <div class="score">0</div>
+        </div>
+        <div class="board hoverable">
+          <div class="board-col" data-col-index="0">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="board-col" data-col-index="1">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="board-col" data-col-index="2">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="board-col" data-col-index="3">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="board-col" data-col-index="4">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="board-col" data-col-index="5">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+          <div class="board-col" data-col-index="6">
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+            <div class="cell"></div>
+          </div>
+        </div>
       </div>
-      <div class="board-col" data-col-index="2">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-      </div>
-      <div class="board-col" data-col-index="3">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-      </div>
-      <div class="board-col" data-col-index="4">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-      </div>
-      <div class="board-col" data-col-index="5">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-      </div>
-      <div class="board-col" data-col-index="6">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
+      <div class="row">
+        <div class="turn-card">
+          <div class="name"><span>Player</span>'s Turn</div>
+          <div class="time"><span>30</span>s</div>
+        </div>
+        <!-- <div class="win-card"> -->
+        <!--   <div class="name">Player</div> -->
+        <!--   <div class="wins">WINS</div> -->
+        <!--   <button>PLAY AGAIN</button> -->
+        <!-- </div> -->
       </div>
     </div>
   </body>
