@@ -13,7 +13,6 @@ async function generateRoomCode(length = 6) {
   }
   const response = await fetch(`${url}/check-room/${result}`);
   const { isAvailable } = await response.json();
-  console.log(isAvailable);
   if (isAvailable) {
     return result;
   } else {
