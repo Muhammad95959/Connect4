@@ -1,4 +1,3 @@
-import "notyf/notyf.min.css";
 import { Notyf } from "notyf";
 
 const form = document.querySelector(".start-game-form") as HTMLFormElement;

@@ -1,5 +1,4 @@
 import { io, Socket } from "socket.io-client";
-import "notyf/notyf.min.css";
 import { Notyf } from "notyf";
 
 const params = new URLSearchParams(window.location.search);
@@ -40,6 +39,7 @@ let columnClickHandlers: (() => void)[] = [];
 
 if (!roomCode) {
   roomInfoElement.innerHTML = `<div class="error">Bad URL!<br /><a href="/">Go back to main menu</a></div>`;
+  throw new Error("No room code provided");
 }
 
 socket = io(url, {
