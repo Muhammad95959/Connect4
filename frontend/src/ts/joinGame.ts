@@ -2,7 +2,7 @@ import "notyf/notyf.min.css";
 import { Notyf } from "notyf";
 
 const form = document.querySelector(".start-game-form") as HTMLFormElement;
-const url = "http://localhost:8000";
+const url = "https://connect4-production-1af4.up.railway.app";
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();

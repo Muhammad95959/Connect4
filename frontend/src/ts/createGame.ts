@@ -1,4 +1,4 @@
-const url = "http://localhost:8000";
+const url = "https://connect4-production-1af4.up.railway.app";
 
 (async () => {
   const roomCode = await generateRoomCode();
