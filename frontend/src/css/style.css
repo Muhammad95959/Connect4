@@ -80,12 +80,15 @@ body {
       max-width: 750px;
       text-align: center;
       line-height: 1.6;
+      padding-left: 15px;
+      padding-right: 15px;
     }
   }
   .menu {
     z-index: 1;
     display: flex;
     gap: 60px;
+    justify-content: center;
     a {
       display: flex;
       justify-content: center;
@@ -114,6 +117,29 @@ body {
       }
     }
   }
+  @media (max-width: 768px) {
+    background-size: cover;
+    .welcome {
+      h1 {
+        font-size: 48px;
+      }
+      p {
+        font-size: 16px;
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+    }
+    .menu {
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: -20px;
+      a {
+        width: 180px;
+        font-size: 16px;
+        padding: 12px 0;
+      }
+    }
+  }
 }
 
 .createGame,
@@ -133,6 +159,9 @@ body {
       position: relative;
       img {
         width: 500px;
+        @media (max-width: 548px) {
+          width: 350px;
+        }
       }
       &::after {
         content: "";
@@ -149,22 +178,38 @@ body {
       flex-direction: column;
       gap: 20px;
       padding: 20px;
+      @media (max-width: 548px) {
+        gap: 10px;
+      }
       h1 {
         text-align: center;
         font-size: 48px;
         margin-bottom: 20px;
         padding: 0 60px;
+        @media (max-width: 548px) {
+          font-size: 36px;
+          padding: 0 20px;
+        }
       }
       label {
         display: block;
         margin-bottom: 10px;
-        font-size: 20px;
+        font-size: 18px;
+        font-weight: 500;
+        @media (max-width: 548px) {
+          font-size: 16px;
+        }
       }
       input {
         width: 100%;
         padding: 20px 40px;
         border-radius: 6px;
+        background-color: #e6e0ec;
         font-size: 18px;
+        @media (max-width: 548px) {
+          font-size: 16px;
+          padding: 15px 30px;
+        }
       }
       button[type="submit"] {
         padding: 20px 40px;
@@ -175,6 +220,10 @@ body {
         color: var(--background);
         margin-top: 20px;
         cursor: pointer;
+        @media (max-width: 548px) {
+          font-size: 16px;
+          padding: 15px 30px;
+        }
         &.create {
           background-color: var(--orange);
           &:hover {
@@ -203,12 +252,17 @@ body {
     padding: 50px 80px;
     border-radius: 20px;
     box-shadow: 0px 2px 10px 5px var(--background-alt);
+    margin-left: 20px;
+    margin-right: 20px;
     &.hidden {
       display: none;
     }
     .room-code {
       font-size: 48px;
       margin-bottom: 30px;
+      @media (max-width: 768px) {
+        font-size: 36px;
+      }
       .code {
         color: var(--orange);
         font-weight: bold;
@@ -220,6 +274,9 @@ body {
         margin-bottom: 40px;
         color: rgba(255, 255, 255, 0.7);
         letter-spacing: 2px;
+        @media (max-width: 768px) {
+          font-size: 16px;
+        }
       }
       .waiting {
         position: relative;
@@ -229,6 +286,9 @@ body {
         border-radius: 5px;
         background-color: var(--background);
         overflow: hidden;
+        @media (max-width: 768px) {
+          height: 7px;
+        }
         &:after {
           content: "";
           position: absolute;
@@ -246,11 +306,16 @@ body {
       color: red;
       font-size: 35px;
       font-weight: bold;
+      @media (max-width: 768px) {
+        font-size: 24px;
+      }
     }
   }
 
   .content {
     z-index: 1;
+    padding-left: 15px;
+    padding-right: 15px;
     &.hidden {
       display: none;
     }
@@ -259,20 +324,38 @@ body {
       justify-content: space-between;
       align-items: center;
       position: relative;
+      &.convertable {
+        @media (max-width: 1200px) {
+          flex-direction: column;
+          gap: 20px;
+        }
+      }
     }
     .top-btns {
       margin-bottom: 40px;
-      button {
+      width: 100%;
+      @media (max-width: 1200px) {
+        margin-bottom: 20px;
+      }
+      button,
+      a {
+        border: 3px solid white;
         background-color: #74c3;
         color: white;
         width: 140px;
         border-radius: 20px;
-        padding: 12px 0;
+        padding: 10px 0;
         font-size: 16px;
         font-weight: bold;
         cursor: pointer;
+        text-decoration: none;
+        display: block;
+        text-align: center;
         &:hover {
           background-color: #74c5;
+        }
+        @media (max-width: 1200px) {
+          font-size: 14px;
         }
       }
       .icon {
@@ -290,56 +373,113 @@ body {
           &:last-child {
             background-color: var(--orange);
           }
+          @media (max-width: 1200px) {
+            width: 10px;
+            height: 10px;
+          }
         }
       }
     }
-    .first-player,
-    .second-player {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 40px 20px 20px;
-      border-radius: 4px;
-      color: var(--background);
-      font-size: 20px;
-      text-align: center;
-      font-weight: bold;
-      box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.4);
-      &::before {
+    .players {
+      @media (max-width: 1200px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        width: 100%;
+      }
+      .first-player,
+      .second-player {
         position: absolute;
-        background-color: white;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 50px 20px 30px;
         border-radius: 20px;
-        padding: 6px 12px;
         color: var(--background);
-        font-weight: bold;
-        top: 0;
-        left: 50%;
-        width: 100px;
+        font-size: 20px;
         text-align: center;
-        box-shadow: 0px 1px 5px 0.5px var(--background-alt-2);
-        transform: translate(-50%, -50%);
+        font-weight: bold;
+        box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.4);
+        border: 3px solid white;
+        &::before {
+          position: absolute;
+          border-radius: 20px;
+          color: var(--background);
+          font-weight: bold;
+          top: 0;
+          left: 50%;
+          width: 30px;
+          height: 30px;
+          border: 3px solid white;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          box-shadow: 0px 1px 5px 0.5px var(--background-alt-2);
+          transform: translate(-50%, -50%);
+        }
+        @media (max-width: 1200px) {
+          position: initial;
+          transform: translate(0, 0);
+          display: flex;
+          align-items: center;
+          padding: 2px 40px;
+          justify-content: space-around;
+          gap: 10px;
+          &.first-player::before {
+            top: 50%;
+            left: 0;
+          }
+          &.second-player::before {
+            top: 50%;
+            left: 100%;
+          }
+          &.second-player {
+            flex-direction: row-reverse;
+          }
+        }
+        @media (max-width: 768px) {
+          padding: 10px;
+          flex-direction: column;
+          &.second-player {
+            flex-direction: column;
+          }
+          gap: 0;
+        }
+        .name {
+          font-size: 15px;
+          width: 100px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          @media (max-width: 768px) {
+            font-size: 13px;
+            width: 80px;
+          }
+        }
+        .score {
+          font-size: 56px;
+          @media (max-width: 1200px) {
+            font-size: 48px;
+          }
+          @media (max-width: 768px) {
+            font-size: 36px;
+          }
+        }
       }
-      .name {
-        width: 150px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+      .first-player {
+        right: calc(100% + 80px);
+        background-color: var(--orange);
+        &::before {
+          content: "1";
+          background-color: var(--orange);
+        }
       }
-      .score {
-        font-size: 56px;
-      }
-    }
-    .first-player {
-      right: calc(100% + 80px);
-      background-color: var(--orange);
-      &::before {
-        content: "Player 1";
-      }
-    }
-    .second-player {
-      left: calc(100% + 80px);
-      background-color: var(--yellow);
-      &::before {
-        content: "Player 2";
+      .second-player {
+        left: calc(100% + 80px);
+        background-color: var(--yellow);
+        &::before {
+          content: "2";
+          background-color: var(--yellow);
+        }
       }
     }
     .board {
@@ -351,11 +491,23 @@ body {
       border-radius: 40px;
       animation: fadeIn 1s;
       padding-bottom: 40px;
-      border: 3px solid black;
+      border: 3px solid white;
+      @media (max-width: 768px) {
+        gap: 10px;
+      }
+      @media (max-width: 548px) {
+        gap: 6px;
+      }
       .board-col {
         display: flex;
         flex-direction: column-reverse;
         gap: 15px;
+        @media (max-width: 768px) {
+          gap: 10px;
+        }
+        @media (max-width: 548px) {
+          gap: 6px;
+        }
         .cell {
           background-color: var(--background);
           border: 3px solid black;
@@ -363,6 +515,18 @@ body {
           width: 80px;
           height: 80px;
           position: relative;
+          @media (max-width: 1200px) {
+            width: 70px;
+            height: 70px;
+          }
+          @media (max-width: 768px) {
+            width: 50px;
+            height: 50px;
+          }
+          @media (max-width: 548px) {
+            width: 40px;
+            height: 40px;
+          }
           &.player-1 {
             background-color: var(--orange);
           }
@@ -379,6 +543,16 @@ body {
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            @media (max-width: 768px) {
+              width: 20px;
+              height: 20px;
+              border-width: 6px;
+            }
+            @media (max-width: 548px) {
+              width: 15px;
+              height: 15px;
+              border-width: 4px;
+            }
           }
         }
       }
@@ -397,6 +571,13 @@ body {
       border-radius: 20px;
       text-align: center;
       box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.4);
+      border: 3px solid white;
+      padding: 0 20px;
+      height: 136px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
       &.hidden {
         display: none;
       }
@@ -414,6 +595,24 @@ body {
         margin-top: -20px;
         margin-bottom: 20px;
       }
+      @media (max-width: 1200px) {
+        .name {
+          font-size: 16px;
+        }
+        .time {
+          font-size: 48px;
+        }
+      }
+      @media (max-width: 768px) {
+        height: 115px;
+        .name {
+          font-size: 14px;
+          width: 180px;
+        }
+        .time {
+          font-size: 36px;
+        }
+      }
     }
     .win-card {
       margin: auto;
@@ -423,6 +622,8 @@ body {
       border-radius: 20px;
       text-align: center;
       box-shadow: 0px 2px 5px 1px rgba(0, 0, 0, 0.4);
+      border: 3px solid white;
+      padding: 0 20px;
       &.hidden {
         display: none;
       }
@@ -433,6 +634,7 @@ body {
         width: 250px;
         overflow: hidden;
         text-overflow: ellipsis;
+        margin-top: -10px;
       }
       .wins {
         font-size: 56px;
@@ -446,11 +648,34 @@ body {
         font-weight: bold;
         padding: 6px 24px;
         border-radius: 14px;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         font-size: 16px;
         cursor: pointer;
         &:hover {
           background-color: var(--background-alt);
+        }
+      }
+      @media (max-width: 1200px) {
+        .name {
+          font-size: 16px;
+        }
+        .wins {
+          font-size: 48px;
+        }
+        button {
+          font-size: 14px;
+        }
+      }
+      @media (max-width: 768px) {
+        .name {
+          font-size: 14px;
+          width: 180px;
+        }
+        .wins {
+          font-size: 36px;
+        }
+        button {
+          font-size: 12px;
         }
       }
     }
@@ -475,6 +700,9 @@ body {
         text-align: center;
         line-height: 1.8;
         margin-bottom: 20px;
+        @media (max-width: 768px) {
+          font-size: 20px;
+        }
       }
       .cancel-btn {
         padding: 6px 40px;
@@ -488,6 +716,10 @@ body {
         &:hover {
           background-color: var(--red);
           color: var(--background-alt);
+        }
+        @media (max-width: 768px) {
+          font-size: 16px;
+          border-width: 3px;
         }
       }
     }
@@ -512,11 +744,17 @@ body {
         text-align: center;
         line-height: 1.8;
         margin-bottom: 20px;
+        @media (max-width: 768px) {
+          font-size: 20px;
+        }
       }
       .btns {
         display: grid;
         grid-template-columns: auto auto;
         gap: 20px;
+        @media (max-width: 548px) {
+          grid-template-columns: auto;
+        }
         button {
           padding: 6px 40px;
           font-size: 20px;
@@ -539,6 +777,10 @@ body {
               background-color: var(--red);
               color: var(--background-alt);
             }
+          }
+          @media (max-width: 768px) {
+            font-size: 16px;
+            border-width: 3px;
           }
         }
       }

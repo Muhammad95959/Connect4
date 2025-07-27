@@ -9,7 +9,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new SocketIOServer(server);
 const players = new Players();
-const timerTime = 10000;
+const timerTime = 30000;
 
 app.use(cors());
 

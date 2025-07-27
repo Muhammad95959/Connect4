@@ -1,4 +1,6 @@
 import { io, Socket } from "socket.io-client";
+import "notyf/notyf.min.css";
+import { Notyf } from "notyf";
 
 const params = new URLSearchParams(window.location.search);
 const name = (params.get("name") as string) || "Player";
@@ -25,8 +27,9 @@ const newGameRequestPendingCancelBtn = document.querySelector(
 const newGameRequestCard = document.querySelector(".new-game-request") as HTMLDivElement;
 const newGameRequestCardDeclineBtn = document.querySelector(".new-game-request .decline") as HTMLButtonElement;
 const newGameRequestCardAcceptBtn = document.querySelector(".new-game-request .accept") as HTMLButtonElement;
+const menuBtn = document.querySelector(".top-btns .menu-btn") as HTMLButtonElement;
 const url = "http://localhost:8000";
-const timerTime = "10";
+const timerTime = "30";
 let socket: Socket;
 let turnTimer: number;
 let opponentName = "player";
@@ -191,6 +194,7 @@ socket.on("acceptPlayAgain", (params) => {
 
 codeElement.textContent = roomCode;
 turnCardTime.textContent = timerTime;
+menuBtn.addEventListener("click", () => new Notyf({ duration: 5000 }).error("Not Implemented Yet."));
 makeTheColumnsClickable();
 
 function makeTheColumnsClickable() {
