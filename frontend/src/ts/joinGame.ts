@@ -1,21 +1,21 @@
 import { Notyf } from "notyf";
 
 const form = document.querySelector(".start-game-form") as HTMLFormElement;
+const joinBtn = document.querySelector("button.join") as HTMLButtonElement;
+const spinner = document.querySelector(".spinner") as HTMLDivElement;
 const url = "https://connect4-production-1af4.up.railway.app";
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+
+  joinBtn.disabled = true;
+  spinner.classList.remove("hidden");
 
   const nameInput = form.querySelector('input[name="name"]') as HTMLInputElement;
   const roomCodeInput = form.querySelector('input[name="roomCode"]') as HTMLInputElement;
 
   const name = nameInput.value.trim();
   const roomCode = roomCodeInput?.value.trim();
-
-  if (!name || !roomCode) {
-    new Notyf({ duration: 5000 }).error("Please fill in all fields.");
-    return;
-  }
 
   try {
     const response = await fetch(`${url}/check-room/${roomCode}`);
@@ -33,4 +33,6 @@ form.addEventListener("submit", async (e) => {
     console.error("Failed to check room:", err);
     new Notyf({ duration: 5000 }).error("Failed to connect to the server.");
   }
+  joinBtn.disabled = false;
+  spinner.classList.add("hidden");
 });

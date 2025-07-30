@@ -32,10 +32,11 @@ body {
   background-size: cover;
   font-family: "Open Sans", sans-serif;
   min-height: 100vh;
+  min-height: 100dvh;
   color: white;
   &::after {
     content: "";
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -59,6 +60,12 @@ body {
   }
   to {
     transform: translateX(350%);
+  }
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -239,6 +246,26 @@ body {
           }
         }
       }
+    }
+  }
+  .spinner {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 8px solid var(--background);
+    border-top-color: var(--yellow);
+    overflow: hidden;
+    animation: rotate 1s linear infinite;
+    @media (max-width: 548px) {
+      border-width: 5px;
+      width: 50px;
+      height: 50px;
+    }
+    &.hidden {
+      display: none;
     }
   }
 }
