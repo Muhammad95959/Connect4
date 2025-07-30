@@ -15,7 +15,7 @@ form.addEventListener("submit", async (e) => {
   const roomCodeInput = form.querySelector('input[name="roomCode"]') as HTMLInputElement;
 
   const name = nameInput.value.trim();
-  const roomCode = roomCodeInput?.value.trim();
+  const roomCode = roomCodeInput?.value.trim().toLowerCase();
 
   try {
     const response = await fetch(`${url}/check-room/${roomCode}`);

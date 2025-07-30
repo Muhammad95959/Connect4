@@ -6,7 +6,7 @@ const url = "https://connect4-production-1af4.up.railway.app";
 })();
 
 async function generateRoomCode(length = 6) {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
