@@ -28,7 +28,7 @@ const newGameRequestCard = document.querySelector(".new-game-request") as HTMLDi
 const newGameRequestCardDeclineBtn = document.querySelector(".new-game-request .decline") as HTMLButtonElement;
 const newGameRequestCardAcceptBtn = document.querySelector(".new-game-request .accept") as HTMLButtonElement;
 const menuBtn = document.querySelector(".top-btns .menu-btn") as HTMLButtonElement;
-const url = "https://connect4-production-1af4.up.railway.app";
+const url = "http://localhost:8000";
 const timerTime = "30";
 let socket: Socket;
 let opponentName = "player";

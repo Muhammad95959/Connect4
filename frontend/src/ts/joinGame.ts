@@ -3,7 +3,7 @@ import { Notyf } from "notyf";
 const form = document.querySelector(".start-game-form") as HTMLFormElement;
 const joinBtn = document.querySelector("button.join") as HTMLButtonElement;
 const spinner = document.querySelector(".spinner") as HTMLDivElement;
-const url = "https://connect4-production-1af4.up.railway.app";
+const url = "http://localhost:8000";
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
