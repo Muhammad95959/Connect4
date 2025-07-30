@@ -59,12 +59,14 @@ io.on("connect", (socket) => {
     const { roomCode } = player;
     const game = games[player.roomCode];
     if (!game) return;
+    let row = 0;
     for (let i = 0; i < game.boardData[params.colIndex].length; i++) {
       if (game.boardData[params.colIndex][i] !== 0) continue;
       game.boardData[params.colIndex][i] = params.first ? 1 : 2;
+      row = i;
       break;
     }
-    io.to(roomCode).emit("boardUpdated", game.boardData);
+    io.to(roomCode).emit("boardUpdated", { boardData: game.boardData, lastCell: { col: params.colIndex, row } });
     clearInterval(timers[roomCode]);
     startTimer(roomCode, player.first);
     checkForWin(game.boardData, params.first ? 1 : 2, roomCode);

@@ -80,14 +80,19 @@ socket.on("opponentDisconnected", () => {
   socket.emit("removeRoom", roomCode);
 });
 
-socket.on("boardUpdated", (boardData: number[][]) => {
+socket.on("boardUpdated", (params) => {
+  const boardData = params.boardData as number[][];
+  const lastCell = params.lastCell as { col: number; row: number };
   boardColumns.forEach((col, index) => {
     const cells = col.getElementsByClassName("cell") as HTMLCollectionOf<HTMLDivElement>;
     for (let i = 0; i < boardData[index].length; i++) {
       const val = boardData[index][i];
-      cells[i].classList.remove("player-1", "player-2");
+      cells[i].classList.remove("player-1", "player-2", "last-cell");
       if (val !== 0) {
         cells[i].classList.add(`player-${val}`);
+      }
+      if (index === lastCell.col && i === lastCell.row) {
+        cells[i].classList.add("last-cell");
       }
     }
   });
