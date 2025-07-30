@@ -18,6 +18,7 @@ const turnCardName = document.querySelector(".turn-card .name span") as HTMLSpan
 const turnCardTime = document.querySelector(".turn-card .time span") as HTMLSpanElement;
 const winCard = document.querySelector(".win-card") as HTMLDivElement;
 const winCardName = document.querySelector(".win-card .name") as HTMLDivElement;
+const drawCard = document.querySelector(".draw-card") as HTMLDivElement;
 const playAgainBtn = document.querySelector(".win-card button") as HTMLButtonElement;
 const newGameRequestPendingCard = document.querySelector(".new-game-request-pending") as HTMLDivElement;
 const newGameRequestPendingCancelBtn = document.querySelector(
@@ -30,11 +31,11 @@ const menuBtn = document.querySelector(".top-btns .menu-btn") as HTMLButtonEleme
 const url = "https://connect4-production-1af4.up.railway.app";
 const timerTime = "30";
 let socket: Socket;
-let turnTimer: number;
 let opponentName = "player";
 let first = true;
 let originalFirst = true;
 let myTurn = true;
+let isMoveInProgress = false;
 let columnClickHandlers: (() => void)[] = [];
 
 if (!roomCode) {
@@ -70,14 +71,6 @@ socket.on("startGame", (params) => {
   firstPlayerCardName.textContent = firstPlayer.name;
   secondPlayerCardName.textContent = secondPlayer.name;
   turnCardName.textContent = firstPlayer.name;
-  turnTimer = setInterval(() => {
-    let remainingTime = +(turnCardTime.textContent as string);
-    turnCardTime.textContent = String(--remainingTime);
-    if (remainingTime <= 0) {
-      clearInterval(turnTimer);
-      turnCardTime.textContent = "0";
-    }
-  }, 1000);
 });
 
 socket.on("opponentDisconnected", () => {
@@ -101,11 +94,12 @@ socket.on("boardUpdated", (boardData: number[][]) => {
   updateTurnCard();
   myTurn = !myTurn;
   myTurn ? boardElement.classList.add("hoverable") : boardElement.classList.remove("hoverable");
+  isMoveInProgress = false;
 });
 
 socket.on("endGame", (params) => {
+  console.log("endGame");
   myTurn = false;
-  clearInterval(turnTimer);
   boardColumns.forEach((col, index) => col.removeEventListener("click", columnClickHandlers[index]));
   columnClickHandlers = [];
   boardElement.classList.remove("hoverable");
@@ -125,8 +119,18 @@ socket.on("endGame", (params) => {
   }
 });
 
+socket.on("draw", () => {
+  console.log("draw");
+  myTurn = false;
+  boardColumns.forEach((col, index) => col.removeEventListener("click", columnClickHandlers[index]));
+  columnClickHandlers = [];
+  boardElement.classList.remove("hoverable");
+  turnCard.classList.add("hidden");
+  drawCard.classList.remove("hidden");
+});
+
 socket.on("timeout", (params) => {
-  clearInterval(turnTimer);
+  console.log("timeout");
   const winner = params.winner;
   boardColumns.forEach((col, index) => col.removeEventListener("click", columnClickHandlers[index]));
   columnClickHandlers = [];
@@ -181,15 +185,10 @@ socket.on("acceptPlayAgain", (params) => {
   winCard.classList.add("hidden");
   turnCard.classList.remove("hidden");
   turnCardName.textContent = first ? name : opponentName;
-  turnCardTime.textContent = timerTime;
-  turnTimer = setInterval(() => {
-    let remainingTime = +(turnCardTime.textContent as string);
-    turnCardTime.textContent = String(--remainingTime);
-    if (remainingTime <= 0) {
-      clearInterval(turnTimer);
-      turnCardTime.textContent = "0";
-    }
-  }, 1000);
+});
+
+socket.on("timerTick", (remainingTime: number) => {
+  turnCardTime.textContent = String(remainingTime);
 });
 
 codeElement.textContent = roomCode;
@@ -214,6 +213,11 @@ function updateTurnCard() {
 
 function handleColumnClick(index: number) {
   return () => {
-    if (myTurn) socket.emit("newMove", { colIndex: index, first: originalFirst });
+    const colCells = [...(boardColumns[index].getElementsByClassName("cell") as HTMLCollectionOf<HTMLDivElement>)];
+    const colHasEmptyCells = colCells.some((cell) => !/player/.test(cell.className));
+    if (myTurn && !isMoveInProgress && colHasEmptyCells) {
+      isMoveInProgress = true;
+      socket.emit("newMove", { colIndex: index, first: originalFirst });
+    }
   };
 }

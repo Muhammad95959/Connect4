@@ -20,8 +20,8 @@ app.get("/check-room/:roomCode", (req, res) => {
 });
 
 const games: { [roomCode: string]: { boardData: number[][] } } = {};
-const timeouts: { [roomCode: string]: NodeJS.Timeout } = {};
 const oddGame: { [roomCode: string]: boolean } = {};
+const timers: { [roomCode: string]: NodeJS.Timeout } = {};
 
 io.on("connect", (socket) => {
   console.log(`A new user connected at ${new Date().toString().split(" ")[4]}`);
@@ -38,11 +38,7 @@ io.on("connect", (socket) => {
       socket.emit("firstTurn", false);
       games[params.roomCode] = { boardData: Array.from({ length: 7 }, () => Array(6).fill(0)) };
       io.to(params.roomCode).emit("startGame", { players: players.getPlayers(params.roomCode) });
-      timeouts[params.roomCode] = setTimeout(() => {
-        const winner = players.getPlayers(params.roomCode).find((p) => p.first === false);
-        io.to(params.roomCode).emit("timeout", { winner, players: players.getPlayers(params.roomCode) });
-        delete timeouts[params.roomCode];
-      }, timerTime);
+      startTimer(params.roomCode, false);
     } else {
       socket.emit("firstTurn", true);
     }
@@ -53,6 +49,7 @@ io.on("connect", (socket) => {
     if (player) {
       delete games[player.roomCode];
       io.to(player.roomCode).emit("opponentDisconnected");
+      clearInterval(timers[player.roomCode]);
     }
   });
 
@@ -68,12 +65,8 @@ io.on("connect", (socket) => {
       break;
     }
     io.to(roomCode).emit("boardUpdated", game.boardData);
-    clearTimeout(timeouts[roomCode]);
-    timeouts[roomCode] = setTimeout(() => {
-      const winner = players.getPlayers(roomCode).find((p) => p.first === player.first);
-      io.to(roomCode).emit("timeout", { winner, players: players.getPlayers(roomCode) });
-      delete timeouts[roomCode];
-    }, timerTime);
+    clearInterval(timers[roomCode]);
+    startTimer(roomCode, player.first);
     checkForWin(game.boardData, params.first ? 1 : 2, roomCode);
   });
 
@@ -93,15 +86,25 @@ io.on("connect", (socket) => {
     oddGame[roomCode] = !oddGame[roomCode];
     games[roomCode] = { boardData: Array.from({ length: 7 }, () => Array(6).fill(0)) };
     io.to(roomCode).emit("acceptPlayAgain", { oddGame: oddGame[roomCode] });
-    timeouts[roomCode] = setTimeout(() => {
-      const winner = players.getPlayers(roomCode).find((p) => p.first === !oddGame[roomCode]);
-      io.to(roomCode).emit("timeout", { winner, players: players.getPlayers(roomCode) });
-      delete timeouts[roomCode];
-    }, timerTime);
+    startTimer(roomCode, !oddGame[roomCode]);
   });
 });
 
 server.listen(port, () => console.log(`Server started at http://localhost:${port}`));
+
+function startTimer(roomCode: string, winnerFirst: boolean) {
+  let remainingTime = timerTime / 1000;
+  io.to(roomCode).emit("timerTick", remainingTime);
+  timers[roomCode] = setInterval(() => {
+    remainingTime--;
+    io.to(roomCode).emit("timerTick", remainingTime);
+    if (remainingTime === 0) {
+      const winner = players.getPlayers(roomCode).find((p) => p.first === winnerFirst);
+      io.to(roomCode).emit("timeout", { winner, players: players.getPlayers(roomCode) });
+      clearInterval(timers[roomCode]);
+    }
+  }, 1000);
+}
 
 function checkForWin(boardData: number[][], playerNumber: number, roomCode: string) {
   let winningCells: number[][] = [];
@@ -117,7 +120,7 @@ function checkForWin(boardData: number[][], playerNumber: number, roomCode: stri
         winningCells = [];
       }
       if (count === 4) {
-        clearTimeout(timeouts[roomCode]);
+        clearInterval(timers[roomCode]);
         return io
           .to(roomCode)
           .emit("endGame", { winnerNumber: playerNumber, players: players.getPlayers(roomCode), winningCells });
@@ -136,7 +139,7 @@ function checkForWin(boardData: number[][], playerNumber: number, roomCode: stri
         winningCells = [];
       }
       if (count === 4) {
-        clearTimeout(timeouts[roomCode]);
+        clearInterval(timers[roomCode]);
         return io
           .to(roomCode)
           .emit("endGame", { winnerNumber: playerNumber, players: players.getPlayers(roomCode), winningCells });
@@ -158,7 +161,7 @@ function checkForWin(boardData: number[][], playerNumber: number, roomCode: stri
           winningCells = [];
         }
         if (count === 4) {
-          clearTimeout(timeouts[roomCode]);
+          clearInterval(timers[roomCode]);
           return io
             .to(roomCode)
             .emit("endGame", { winnerNumber: playerNumber, players: players.getPlayers(roomCode), winningCells });
@@ -183,7 +186,7 @@ function checkForWin(boardData: number[][], playerNumber: number, roomCode: stri
           winningCells = [];
         }
         if (count === 4) {
-          clearTimeout(timeouts[roomCode]);
+          clearInterval(timers[roomCode]);
           return io
             .to(roomCode)
             .emit("endGame", { winnerNumber: playerNumber, players: players.getPlayers(roomCode), winningCells });
@@ -191,6 +194,16 @@ function checkForWin(boardData: number[][], playerNumber: number, roomCode: stri
         row--;
         col++;
       }
+    }
+  }
+  // check draw
+  for (let i = 0; i < boardData.length; i++) {
+    for (let j = 0; j < boardData[0].length; j++) {
+      if (boardData[i][j] === 0) return;
+    }
+    if (i === boardData.length - 1) {
+      clearInterval(timers[roomCode]);
+      io.to(roomCode).emit("draw");
     }
   }
 }
